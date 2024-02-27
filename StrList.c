@@ -150,6 +150,7 @@ void printList(const struct StrList* list) {
         printf("\n");
         return;
     }
+   
 
     struct Node *current = list->head;
 
@@ -158,7 +159,7 @@ void printList(const struct StrList* list) {
         printf("%s ", current->data);
         current = current->next;
     }
-    
+    printf("\n");
 }
 
 // Function to print the length of the list
@@ -185,7 +186,7 @@ void printElementAtIndex(const struct StrList *list, int index) {
     struct Node *current = list->head;
     int currentIndex = 0;
     while (current != NULL) {
-        if (currentIndex == index) {
+        if (currentIndex-1 == index) {
             printf("%s\n", current->data);
             return;
         }
@@ -203,8 +204,7 @@ void numOfChars(const struct StrList *list) {
     int count = 0;
     struct Node *current = list->head;
     while (current != NULL) {
-        size_t len = strlen(current->data);
-        count += len;
+        if (strcmp(current->data, data) ==0)
         current = current->next;
     }
     printf("%d\n" , count);
@@ -364,7 +364,6 @@ void createList(StrList* StrList, int length, char* str){
         substring = (char*)malloc(j+1);
         strncpy(substring, str, j);
         substring[j] = '\0';
-        
         insertElement(StrList, substring);
         
         j++;
