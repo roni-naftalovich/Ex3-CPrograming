@@ -33,6 +33,7 @@ void StrList_free(StrList* StrList) {
 
     Node* current = StrList->head;
     Node* next = NULL;
+    StrList->head= NULL;
 
     while (current != NULL) {
         next = current->next;
@@ -40,7 +41,7 @@ void StrList_free(StrList* StrList) {
         free(current);
         current = next;
     }
-
+    StrList->length=0;
     free(StrList);
 }
 

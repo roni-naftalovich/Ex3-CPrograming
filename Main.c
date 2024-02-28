@@ -4,7 +4,7 @@
 #include "StrList.c"
 #include "StrList.h"
 
-#define MAX_INPUT 100
+#define MAX_INPUT 150
 
 int main()
 {
@@ -82,7 +82,7 @@ int main()
             break;
         case 11:
             StrList_free(list);
-            exit(EXIT_SUCCESS);
+            //exit(EXIT_SUCCESS);
             break;
         case 12:
             StrList_sort(list);
