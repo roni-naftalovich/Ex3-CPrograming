@@ -1,78 +1,94 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "StrList.c"
 #include "StrList.h"
 
 #define MAX_INPUT 100
 
+
+
 int main()
 {
-    int size;
-    struct StrList *list = StrList_alloc();
+    StrList *list = StrList_alloc();
     int choice;
     char *str;
     int index;
+    int length;
 
     scanf("%d", &choice);
     while (choice != 0)
     {
-
         switch (choice)
         {
         case 1:
-            scanf(" %d", &size);
-            str = (char *)malloc(MAX_INPUT * size);
-            scanf(" %[^\n]s", str);
-            str = realloc(str, strlen(str));
-            createList(list, size, str);
-            free(str);
+          str = malloc(sizeof(char) * MAX_INPUT);
+            scanf("%d ", &length);
+            fgets(str, MAX_INPUT, stdin);
+
+            int j = 0;
+
+            for (int i = 0; i < length; i++)
+            {
+                char *substring;
+                while (str[j] != ' ' && j < strlen(str))
+                {
+                    j++;
+                }
+
+                substring = (char *)malloc(j + 1);
+                strncpy(substring, str, j);
+                substring[j] = '\0';
+                StrList_insertLast(list, substring);
+
+                j++;
+                str += j;
+                j = 0;
+
+            }
+            list->length= length;
             break;
         case 2:
-            str = (char *)malloc(MAX_INPUT);
-            scanf(" %d", &index);
-            scanf(" %s", str);
-            insertAtIndex(list, str, index);
-            free(str);
+            scanf("%d %s", &index, str);
+            StrList_insertAt(list, str, index);
             break;
         case 3:
-            printList(list);
+            StrList_print(list);
             break;
         case 4:
-            printListLength(list);
+            printf("%zu\n", StrList_size(list));
             break;
         case 5:
-            scanf(" %d", &index);
-            printElementAtIndex(list, index);
+            scanf("%d", &index);
+            StrList_printAt(list, index);
             break;
         case 6:
-            numOfChars(list);
+            printf("%d\n", StrList_printLen(list));
             break;
         case 7:
-            str = (char *)malloc(MAX_INPUT);
-            scanf(" %s", str);
-            numOfShows(list, str);
-            free(str);
+            scanf("%s", str);
+            printf("%d\n", StrList_count(list, str));
             break;
         case 8:
-            str = (char *)malloc(MAX_INPUT);
-            scanf(" %s", str);
-            removeElement(list, str);
+            scanf("%s", str);
+            StrList_remove(list, str);
             break;
         case 9:
-            scanf(" %d", &index);
-            removeElementAt(list, index);
+            scanf("%d", &index);
+            StrList_removeAt(list, index);
             break;
         case 10:
-            reverse(list);
+            StrList_reverse(list);
             break;
         case 11:
             StrList_free(list);
+            exit(EXIT_SUCCESS);
             break;
         case 12:
-            sortList(list);
+            StrList_sort(list);
             break;
         case 13:
-            if (isSorted(list) == 1)
+            if (StrList_isSorted(list) == 1)
             {
                 printf("true\n");
             }
@@ -81,10 +97,12 @@ int main()
                 printf("false\n");
             }
             break;
-        case 0:
-            StrList_free(list);
-            free(list);
+        default:
+            printf("Invalid choice\n");
+            break;
         }
-        scanf(" %d", &choice);
+        scanf("%d", &choice);
     }
+
+    return 0;
 }
