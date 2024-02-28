@@ -164,12 +164,16 @@ void StrList_print(const StrList* StrList) {
     }
 
     Node* current = StrList->head;
-    while (current != NULL) {
-        printf("%s ", current->data);
-        current = current->next;
-    }
-    printf("\n");
-}
+    if (current != NULL)
+    {
+        while (current->next != NULL)
+        {
+            printf("%s ", current->data);
+            current = current->next;
+        }
+    
+        printf("%s\n", current->data);
+    }}
 
 void StrList_printAt(const StrList* StrList, int index) {
     if (StrList == NULL || index < 0 || index >= StrList->length) {
@@ -190,14 +194,14 @@ int StrList_printLen(const StrList* StrList) {
     int countChars = 0;
     Node *temp = StrList->head;
 
-    while (temp!=NULL)
+    while (temp !=NULL)
     {
         int sizeOfString = strlen(temp->data);
         countChars += sizeOfString;
         temp = temp->next;
     }
 
-    return countChars-1;
+    return countChars;
 }
 
 int StrList_count(StrList* StrList, const char* data) {

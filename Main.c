@@ -6,8 +6,6 @@
 
 #define MAX_INPUT 100
 
-
-
 int main()
 {
     StrList *list = StrList_alloc();
@@ -22,19 +20,21 @@ int main()
         switch (choice)
         {
         case 1:
-          str = malloc(sizeof(char) * MAX_INPUT);
+            str = malloc(sizeof(char) * MAX_INPUT);
             scanf("%d ", &length);
             fgets(str, MAX_INPUT, stdin);
 
-            int j = 0;
+           int j = 0;
 
             for (int i = 0; i < length; i++)
             {
                 char *substring;
-                while (str[j] != ' ' && j < strlen(str))
+                char ch = '\'';
+                if(str[j] != ch ){
+                while (str[j] !=' ' && j< strlen(str) && str[j] !='\n')
                 {
-                    j++;
-                }
+                    j++; 
+                }}
 
                 substring = (char *)malloc(j + 1);
                 strncpy(substring, str, j);
@@ -46,7 +46,7 @@ int main()
                 j = 0;
 
             }
-            list->length= length;
+            list->length=length;
             break;
         case 2:
             scanf("%d %s", &index, str);
