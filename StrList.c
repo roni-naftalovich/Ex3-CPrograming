@@ -41,14 +41,14 @@ void StrList_free(StrList* StrList){
         return;
     }
 
-    Node* p1 = StrList->head;
-    Node* p2;
+    Node* current = StrList->head;
+    Node* next;
 
     // Free the nodes
-    while(p1 != NULL) {
-        p2 = p1;
-        p1 = p1->next;
-        Node_free(p2);
+    while(current != NULL) {
+        next = current;
+        current = current->next;
+        Node_free(next);
     }
 
     //Free the list
@@ -107,7 +107,7 @@ void createList(StrList* StrList, int length, char* str){
         j++;
         str += j;
         j = 0;
-        //free(substring);
+        free(substring);
     }
     
 }
