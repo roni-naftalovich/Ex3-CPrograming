@@ -4,105 +4,128 @@
 #include "StrList.c"
 #include "StrList.h"
 
-#define MAX_INPUT 150
+char* extractWord(){
+   char* str = (char*)malloc(sizeof(char));
+   *str = '\0';
+   char c = getchar(); 
+   while(c!=' '&&c!='\n'&&c!=EOF){
+      int len = strlen(str); 
+      str = (char*)realloc(str,len+2);  
+      if (str == NULL) {
+         printf("Memory allocation failed\n");
+         exit(EXIT_FAILURE);
+      }
+      str[len] = c;                      
+      str[len+1] = '\0';                 
+      c = getchar();                      
+   }
 
-int main()
-{
+   return str;  
+}
+
+
+
+ int main() {
     StrList *list = StrList_alloc();
-    int choice;
-    char *str;
-    int index;
-    int length;
-
+    char c;
+    int choice = -1;
     scanf("%d", &choice);
-    while (choice != 0)
-    {
-        switch (choice)
-        {
-        case 1:
-            str = malloc(sizeof(char) * MAX_INPUT);
-            scanf("%d ", &length);
-            fgets(str, MAX_INPUT, stdin);
 
-           int j = 0;
+    while (choice != 0) {
 
-            for (int i = 0; i < length; i++)
-            {
-                char *substring;
-                char ch = '\'';
-                if(str[j] != ch ){
-                while (str[j] !=' ' && j< strlen(str) && str[j] !='\n')
-                {
-                    j++; 
-                }}
-
-                substring = (char *)malloc(j + 1);
-                strncpy(substring, str, j);
-                substring[j] = '\0';
-                StrList_insertLast(list, substring);
-
-                j++;
-                str += j;
-                j = 0;
-
+        switch (choice) {
+            case 1: {
+                int length = 0;
+                if (scanf("%d", &length) != 1) {
+                    printf("Invalid input\n");
+                    break;
+                }
+                while((c=getchar())!='\n'&&c!=EOF);
+                for (int i = 0; i < length; i++) {
+                    char *str = extractWord();
+                    StrList_insertLast(list, str);
+                }
+                break;
             }
-            list->length=length;
-            break;
-        case 2:
-            scanf("%d %s", &index, str);
-            StrList_insertAt(list, str, index);
-            break;
-        case 3:
-            StrList_print(list);
-            break;
-        case 4:
-            printf("%zu\n", StrList_size(list));
-            break;
-        case 5:
-            scanf("%d", &index);
-            StrList_printAt(list, index);
-            break;
-        case 6:
-            printf("%d\n", StrList_printLen(list));
-            break;
-        case 7:
-            scanf("%s", str);
-            printf("%d\n", StrList_count(list, str));
-            break;
-        case 8:
-            scanf("%s", str);
-            StrList_remove(list, str);
-            break;
-        case 9:
-            scanf("%d", &index);
-            StrList_removeAt(list, index);
-            break;
-        case 10:
-            StrList_reverse(list);
-            break;
-        case 11:
-            StrList_free(list);
-            //exit(EXIT_SUCCESS);
-            break;
-        case 12:
-            StrList_sort(list);
-            break;
-        case 13:
-            if (StrList_isSorted(list) == 1)
-            {
-                printf("true\n");
+            case 2: {
+                int index = -1;
+                scanf("%d", &index);
+                if (index < 0 || index > StrList_size(list)) {
+                    printf("Index out of bounds\n");
+                    break;
+                }
+                while((c=getchar())!='\n'&&c!=EOF);
+                char *str = extractWord();
+                StrList_insertAt(list, str, index);
+                break;
             }
-            else
-            {
-                printf("false\n");
+            case 3:
+                StrList_print(list);
+                break;
+            case 4: {
+                int size = StrList_size(list);
+                printf("%d\n", size);
+                break;
             }
-            break;
-        default:
-            printf("Invalid choice\n");
-            break;
+            case 5: {
+                int index = -1;
+                scanf("%d", &index);
+                if (index < 0 || index > StrList_size(list)) {
+                    printf("Index out of bounds\n");
+                    continue;
+                }
+                StrList_printAt(list, index);
+                break;
+            }
+            case 6:
+                printf("%d\n", StrList_printLen(list));
+                break;
+            case 7: {
+                while((c=getchar())!='\n'&&c!=EOF);
+                char *str = extractWord();
+                int count = StrList_count(list, str);
+                printf("%d\n", count);
+                break;
+            }
+            case 8: {
+                while((c=getchar())!='\n'&&c!=EOF);
+                char *str = extractWord();
+                StrList_remove(list, str);
+                break;
+            }
+            case 9: {
+                int index = -1;
+                scanf("%d", &index);
+                StrList_removeAt(list, index);
+                break;
+            }
+            case 10:
+                StrList_reverse(list);
+                break;
+            case 11:
+                while (StrList_size(list)) {
+                    StrList_removeAt(list, 0);
+                }
+                break;
+            case 12:
+                StrList_sort(list);
+                break;
+            case 13:
+                if (StrList_isSorted(list) == 1) {
+                    printf("true\n");
+                } else {
+                    printf("false\n");
+                }
+                break;
+            default:
+                printf("Invalid choice\n");
+                break;
         }
+
         scanf("%d", &choice);
     }
-
+    
+    StrList_free(list);
+    
     return 0;
 }

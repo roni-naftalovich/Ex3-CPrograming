@@ -26,22 +26,32 @@ StrList* StrList_alloc() {
     return new_list;
 }
 
-void StrList_free(StrList* StrList) {
-    if (StrList == NULL) {
+void Node_free(Node* node) {
+
+    // Free the data
+    free((void*)node->data);
+
+    free(node);
+}
+
+void StrList_free(StrList* StrList){
+
+    if (StrList==NULL){
+        free(StrList);
         return;
     }
 
-    Node* current = StrList->head;
-    Node* next = NULL;
-    StrList->head= NULL;
+    Node* p1 = StrList->head;
+    Node* p2;
 
-    while (current != NULL) {
-        next = current->next;
-        free((char*)current->data);
-        free(current);
-        current = next;
+    // Free the nodes
+    while(p1 != NULL) {
+        p2 = p1;
+        p1 = p1->next;
+        Node_free(p2);
     }
-    StrList->length=0;
+
+    //Free the list
     free(StrList);
 }
 
@@ -97,10 +107,11 @@ void createList(StrList* StrList, int length, char* str){
         j++;
         str += j;
         j = 0;
-        free(substring);
+        //free(substring);
     }
     
 }
+
 
 
 void StrList_insertLast(StrList* StrList, const char* data) {
@@ -123,32 +134,31 @@ void StrList_insertLast(StrList* StrList, const char* data) {
 }
 
 void StrList_insertAt(StrList* StrList, const char* data, int index) {
-    if (StrList == NULL || index < 0 || index > StrList->length) {
+     //Out of range index
+    if (index < 0 || index > StrList->length) {
         return;
     }
 
-    Node* new_node = (Node*)malloc(sizeof(Node));
-    if (new_node == NULL) {
-        perror("Memory allocation failed");
-        exit(EXIT_FAILURE);
+    Node *node = Node_alloc(data, NULL);
+
+    // Insert as the head
+    if(index == 0){
+        node->next = StrList->head;
+        StrList->head = node;
     }
 
-    new_node->data = strdup(data);
-    new_node->next = NULL;
-
-    if (index == 0) {
-        new_node->next = StrList->head;
-        StrList->head = new_node;
-    } else {
-        Node* current = StrList->head;
+    else{
+        Node* current_node = StrList->head;
         for (int i = 0; i < index - 1; i++) {
-            current = current->next;
+            current_node = current_node->next;
         }
-        new_node->next = current->next;
-        current->next = new_node;
+        node->next = current_node->next;
+        current_node->next = node;
     }
 
-    StrList->length++;
+    // Increase the size
+    StrList->length = StrList->length + 1;
+
 }
 
 char* StrList_firstData(const StrList* StrList) {
